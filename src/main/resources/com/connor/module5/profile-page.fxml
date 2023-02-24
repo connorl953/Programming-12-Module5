@@ -12,7 +12,7 @@
     <children>
         <AnchorPane prefHeight="48.0" prefWidth="310.0" styleClass="top-bar">
             <children>
-                <Label layoutX="118.0" layoutY="14.0" text="Profile Page" textFill="#8c90b3">
+                <Label layoutX="126.0" layoutY="14.0" text="Add User" textFill="#8c90b3">
                     <font>
                         <Font size="14.0" />
                     </font>
