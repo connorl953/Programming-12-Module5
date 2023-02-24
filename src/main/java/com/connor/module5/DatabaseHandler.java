@@ -1,7 +1,6 @@
 package com.connor.module5;
-import java.io.FileWriter;
+
 import java.sql.*;
-import java.util.ArrayList;
 
 
 public class DatabaseHandler {
@@ -13,6 +12,15 @@ public class DatabaseHandler {
         createConnection();
     }
 
+    /**
+     * login()
+     * This method attempts to log in a user with the given username and password.
+     *
+     * @param username The username of the user attempting to log in.
+     * @param password The password of the user attempting to log in.
+     * @return A boolean value indicating whether the login was successful.
+     * @throws SQLException If an error occurs while attempting to log in.
+     */
     public boolean login(String username, String password) throws SQLException {
         stmt = conn.createStatement();
         String statement = "SELECT * FROM LOGINS WHERE USERNAME = '" + username + "' AND PASSWORD='" + password + "'";
@@ -20,6 +28,15 @@ public class DatabaseHandler {
 
         return rs.next();
     }
+    /**
+     * register()
+     * This method attempts to register a user with the given username and password.
+     *
+     * @param username The username of the user attempting to register.
+     * @param password The password of the user attempting to register.
+     * @return A boolean value indicating whether the registration was successful.
+     * @throws SQLException If an error occurs while attempting to register.
+     */
     public boolean register(String username, String password) throws SQLException {
         stmt = conn.createStatement();
         if(checkExists(username)) {
@@ -29,6 +46,14 @@ public class DatabaseHandler {
         stmt.execute(statement);
         return true;
     }
+    /**
+     * checkExists()
+     * This method checks if a user with the given username already exists.
+     *
+     * @param username The username of the user to check for.
+     * @return A boolean value indicating whether the user exists.
+     * @throws SQLException If an error occurs while attempting to check for the user.
+     */
     public boolean checkExists(String username) throws SQLException {
         stmt = conn.createStatement();
         String statement = "SELECT * FROM LOGINS WHERE USERNAME='" + username + "'";
@@ -36,6 +61,7 @@ public class DatabaseHandler {
 
         return rs.next();
     }
+
     /**
      *  Attempts to create a table the database for logins.
      */
@@ -63,67 +89,6 @@ public class DatabaseHandler {
         }
     }
 
-
-    /**
-     * This method imports table data into a database.
-     *
-     * @param TABLE_NAME The name of the table to be imported.
-     * @param headers An ArrayList of the headers for the table.
-     * @param data An ArrayList of the data for the table.
-     * @return A String indicating whether the import was successful or not.
-     * @throws SQLException If an error occurs while importing the data.
-     */
-    public String importTableData(String TABLE_NAME, ArrayList<String> headers, ArrayList<String> data) throws SQLException {
-        try {
-            createTable();
-            for (String s : headers) {
-                createTableColumn(TABLE_NAME, s);
-            }
-            for(String s : data){
-                addData(TABLE_NAME, s);
-            }
-            return "Success";
-        } catch (SQLException e){
-            e.printStackTrace();
-            return "Exception caught.";
-        }
-
-    }
-
-    /**
-     * exports a table from a database to a CSV file.
-     *
-     * @param tableName The name of the table to be exported.
-     * @param fileName The name of the CSV file to be created.
-     */
-    public void exportTableToCSV(String tableName, String fileName) {
-        try {
-            stmt = conn.createStatement();
-            String query = "SELECT * FROM " + tableName;
-            ResultSet rs = stmt.executeQuery(query);
-            FileWriter fw = new FileWriter(fileName);
-            for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
-                fw.append(rs.getMetaData().getColumnName(i));
-                if (i < rs.getMetaData().getColumnCount()) {
-                    fw.append(",");
-                }
-            }
-            fw.append("\n");
-            while (rs.next()) {
-                for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
-                    fw.append(rs.getString(i));
-                    if (i < rs.getMetaData().getColumnCount()) {
-                        fw.append(",");
-                    }
-                }
-                fw.append("\n");
-            }
-            fw.flush();
-            fw.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     /**
      * Creates a connection to the database using the org.apache.derby.jdbc.ClientDriver.
@@ -174,29 +139,4 @@ public class DatabaseHandler {
     }
 
 
-
-
-    public boolean execAction(String qu) {
-        try {
-            stmt = conn.createStatement();
-            stmt.execute(qu);
-            return true;
-
-        } catch (SQLException throwables) {
-            System.out.println(throwables);
-            System.out.println("Did not enter data");
-        }
-        return false;
-    }
-    public ResultSet execQuery(String query){
-        ResultSet resultSet;
-        try{
-            stmt = conn.createStatement();
-            resultSet = stmt.executeQuery(query);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-            return null;
-        }
-        return resultSet;
-    }
 }

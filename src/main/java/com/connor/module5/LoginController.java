@@ -1,8 +1,6 @@
 package com.connor.module5;
 
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -26,7 +24,12 @@ public class LoginController {
     DatabaseHandler handler = new DatabaseHandler();
     Stage profilePageStage;
 
-
+    /**
+     * loadProfileWindow()
+     * Loads the profile page window for the user.
+     *
+     * @throws IOException if the profile-page.fxml file cannot be found
+     */
     private void loadProfileWindow() throws IOException {
         FXMLLoader profileLoader = new FXMLLoader(Application.class.getResource("profile-page.fxml"));
         profilePageStage = new Stage(StageStyle.DECORATED);
@@ -35,6 +38,14 @@ public class LoginController {
         profilePageStage.setScene(profileScene);
         profilePageStage.show();
     }
+    /**
+     * login(MouseEvent mouseEvent)
+     * Logs the user in with the given username and password.
+     *
+     * @param mouseEvent the mouse event that triggered the login
+     * @throws SQLException if there is an error with the database
+     * @throws IOException if the profile-page.fxml file cannot be found
+     */
     public void login(MouseEvent mouseEvent) throws SQLException, IOException {
         String username = usernameInput.getText();
         String password = passwordInput.getText();
@@ -48,7 +59,13 @@ public class LoginController {
             invalidLoginText.setVisible(true);
         }
     }
-
+    /**
+     * register(MouseEvent mouseEvent)
+     * Registers the user with the given username and password.
+     *
+     * @param mouseEvent the mouse event that triggered the registration
+     * @throws SQLException if there is an error with the database
+     */
     public void register(MouseEvent mouseEvent) throws SQLException {
         String username = usernameInput.getText();
         String password = passwordInput.getText();
@@ -59,7 +76,12 @@ public class LoginController {
             registerText.setText("Username is taken!");
         }
     }
-
+    /**
+     * logout(MouseEvent mouseEvent)
+     * Logs the user out and closes the profile page window.
+     *
+     * @param mouseEvent the mouse event that triggered the logout
+     */
     public void logout(MouseEvent mouseEvent) {
         loginStuff.setVisible(true);
         logoutStuff.setVisible(false);
